@@ -1,0 +1,32 @@
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+.venv/
+venv/
+
+# Environments
+.env
+.env.*
+local_settings.py
+
+# Ruff cache
+.ruff_cache/
+
+# uv cache
+.uv/
+
+# OS generated files 
+.DS_Store
+
+# Docker
+.dockerenv
+docker-compose.yml
+docker-compose.override.yml
+
+# Logs
+*.log
+logs/
