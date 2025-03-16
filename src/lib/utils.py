@@ -4,7 +4,7 @@ import datetime
 import psutil
 
 
-def get_temperature() -> int:
+def get_temperature() -> float | str:
     try:
         with open("/sys/class/thermal/thermal_zone0/temp") as f:
             temp = int(f.read().strip()) / 1000.0  # 単位を℃へ変換

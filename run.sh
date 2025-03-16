@@ -8,8 +8,11 @@ fi
 
 # 新しいコンテナを起動
 echo "Starting Docker container..."
-sudo docker run -d -p 3000:3000 -e PORT=3000 --name py-monitor py-monitor
-
+sudo docker run -d -p 3000:3000 -e PORT=3000 --name py-monitor \
+    --volume /proc:/host_proc:ro \
+    --privileged \
+    py-monitor
+    
 # ステータス確認
 echo "Docker container started successfully."
 echo "Running containers:"

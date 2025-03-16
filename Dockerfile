@@ -1,25 +1,17 @@
-FROM python:3.11-slim
-
-# 作業ディレクトリを設定
+FROM python:3.11-alpine
 WORKDIR /app
 
-# 依存関係をコピー
-COPY pyproject.toml .
+# psutilをビルドするのに必要なパッケージをインストール
+RUN apk add --no-cache gcc python3-dev musl-dev linux-headers
 
-# 依存関係をインストール
-RUN pip install uv && uv venv && uv pip install --no-cache-dir -r pyproject.toml
+# requirements.txtを作成して依存関係をインストール
+COPY requirements.txt .
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
 
-# ソースコードをコピー
 COPY src /app/src
-
-# .envファイルをコピー
 COPY .env .
-
-# ログファイルを生成する
 RUN touch /app/system_monitor.log
 
-# 3001ポートを公開
 EXPOSE 3000
-
-# サーバーを起動
-CMD [".venv/bin/uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "3000"]
+CMD ["python3", "-m", "src.main"]
