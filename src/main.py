@@ -7,7 +7,7 @@ import dotenv
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi import FastAPI
 
-from src.lib.utils import write_log_info, get_env_files
+from src.lib.utils import write_log_info, get_env_files, init_logger
 from src.routers import log, root
 
 # load .env file
@@ -22,6 +22,8 @@ app.include_router(log.router)
 if __name__ == "__main__":
     import uvicorn
 
+    logger = init_logger(__name__)
+
     # ログファイルのパスを取得
     log_file_path = get_env_files()
 
@@ -33,3 +35,5 @@ if __name__ == "__main__":
     # 環境変数からポート番号を取得、デフォルトは3000
     port = int(os.getenv("PORT", 3000))
     uvicorn.run(app, host="0.0.0.0", port=port)
+
+    logger.info("Server started")

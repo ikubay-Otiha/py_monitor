@@ -3,18 +3,21 @@ from datetime import datetime
 from fastapi import APIRouter
 
 from src.lib.models import LogResponse
-from src.lib.utils import get_env_files
+from src.lib.utils import get_env_files, init_logger
 
 router = APIRouter()
 
 
 @router.get("/log", response_model=LogResponse | None)
 def read_logs():
+    logger = init_logger(__name__)
+
     try:
         log_file_path = get_env_files()
         with open(log_file_path) as f:
             lines = f.readlines()
             if not lines:
+                logger.info(f"log_file is not found {log_file_path}")
                 return None
 
             latest_log = lines[-1].strip()
@@ -37,10 +40,13 @@ def read_logs():
                 net_io_recv=net_io_recv,
                 temperature=temperature,
             )
+            logger.info(f"Response: {res}")
             return res
 
     except FileNotFoundError:
+        logger.error("Log file not found")
         return {"error": "Log file not found"}
 
     except (ValueError, IndexError):
+        logger.error("Invalid log format")
         return {"error": "Invalid log format"}

@@ -1,5 +1,6 @@
 import os
 import datetime
+import logging
 
 import psutil
 
@@ -33,3 +34,30 @@ def get_env_files() -> str:
         return log_file_path
     except TypeError:
         return {"error": ".env file not found"}
+
+
+def init_logger(name: str) -> logging.Logger:
+    """initialize logger
+
+    Args:
+        name (str): _description_
+    """
+    # create logger handler
+    logger = logging.getLogger(name)
+    logger.setLevel(logging.INFO)
+
+    # create logger handler
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.INFO)
+
+    # create formatter
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+    handler.setFormatter(formatter)
+
+    # add handler to logger
+    logger.addHandler(handler)
+
+    logger.info("Complete logger initialization")
+    return logger
